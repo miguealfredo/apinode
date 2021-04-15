@@ -54,26 +54,9 @@ function save({ body: { _category, user } }, response) {
     } else ResponseManager.incompleteFields(response);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-function down({ body: { _category } }, response) {
-    //console.log(id);
-    if ( _category.name && _category.name.length > 0 ) {
-            CategoryRestaurant.findById(_category.id).then(
-                item => {
-                    item.active = 0;
-                    item.save().then(() => {
-                        ResponseManager.ok(response, {id: item.id});
-                    }).catch(error => ResponseManager.error(response, 500, "Error update item", error));
-                }
-            ).catch(error => ResponseManager.error(response, 500, "not find item"));
-      
-    } else ResponseManager.incompleteFields(response);
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
     getList,
     save,
-    down,
 };

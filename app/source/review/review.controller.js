@@ -26,13 +26,16 @@ function getList(request, response) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-function save({ body: { _category, user } }, response) {
+function save({ body: { _review, user } }, response) {
     //console.log(id);
-    if ( _category.name && _category.name.length > 0 ) {
-        if (_category.id) {
-            Review.findById(_category.id).then(
+    if ( _review.restaurant_id && _review.restaurant_reviews_review && _review.restaurant_reviews_qualification ) {
+        if (_review.id) {
+            Review.findById(_review.id).then(
                 item => {
-                    item.name = _category.name;
+                    item.restaurant_id = _review.restaurant_id;
+                    item.restaurant_reviews_review = _review.restaurant_reviews_review;
+                    item.restaurant_reviews_qualification = _review.restaurant_reviews_qualification;
+                    item.restaurant_reviews_active = _review.restaurant_reviews_active;
                     update_user = user;
                     update_date =  new Date();
                     item.save().then(() => {
@@ -42,7 +45,10 @@ function save({ body: { _category, user } }, response) {
             ).catch(error => ResponseManager.error(response, 500, "not find item"));
         } else {
             Review.create({
-                name: company.name,
+                restaurant_id: _review.restaurant_id,
+                restaurant_reviews_review: _review.restaurant_reviews_review,
+                restaurant_reviews_qualification: _review.restaurant_reviews_qualification,
+                restaurant_reviews_active: _review.restaurant_reviews_active,
                 create_user : user,
                 create_date : new Date(),
                 update_user : user,
@@ -55,12 +61,12 @@ function save({ body: { _category, user } }, response) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-function down({ body: { _category } }, response) {
+function down({ body: { id } }, response) {
     //console.log(id);
-    if ( _category.name && _category.name.length > 0 ) {
-            Review.findById(_category.id).then(
+    if (id) {
+            Review.findById(id).then(
                 item => {
-                    item.active = 0;
+                    item.restaurant_reviews_active = 0;
                     item.save().then(() => {
                         ResponseManager.ok(response, {id: item.id});
                     }).catch(error => ResponseManager.error(response, 500, "Error update item", error));

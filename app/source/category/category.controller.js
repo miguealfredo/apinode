@@ -28,11 +28,11 @@ function getList(request, response) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 function save({ body: { _category, user } }, response) {
     //console.log(id);
-    if ( _category.name && _category.name.length > 0 ) {
+    if ( _category.category_name && _category.category_name.length > 0 ) {
         if (_category.id) {
             Category.findById(_category.id).then(
                 item => {
-                    item.name = _category.name;
+                    item.category_name = _category.category_name;
                     update_user = user;
                     update_date =  new Date();
                     item.save().then(() => {
@@ -42,7 +42,7 @@ function save({ body: { _category, user } }, response) {
             ).catch(error => ResponseManager.error(response, 500, "not find item"));
         } else {
             Category.create({
-                name: company.name,
+                category_name: _category.name,
                 create_user : user,
                 create_date : new Date(),
                 update_user : user,
@@ -55,12 +55,12 @@ function save({ body: { _category, user } }, response) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-function down({ body: { _category } }, response) {
+function down({ body: { id } }, response) {
     //console.log(id);
-    if ( _category.name && _category.name.length > 0 ) {
-            Category.findById(_category.id).then(
+    if ( id) {
+            Category.findById(id).then(
                 item => {
-                    item.active = 0;
+                    item.category_active = 0;
                     item.save().then(() => {
                         ResponseManager.ok(response, {id: item.id});
                     }).catch(error => ResponseManager.error(response, 500, "Error update item", error));

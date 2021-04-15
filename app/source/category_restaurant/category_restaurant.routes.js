@@ -7,7 +7,7 @@ const controller = require('./category_restaurant.controller');
 
 api.get('/list', controller.getList);
 api.post('/save', controller.save);
-api.post('/delete', controller.save);
+api.post('/delete', controller.down);
 
 
 module.exports = api;
